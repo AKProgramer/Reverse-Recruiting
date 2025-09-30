@@ -324,27 +324,8 @@ export default function Home() {
       setSubmitStatus('success');
       setGoogleSheetUrl(response.sheetUrl);
       
-      // Show success message for 3 seconds then redirect
-      setTimeout(() => {
-        window.open(response.sheetUrl, '_blank');
-        
-        // Reset form after redirect
-        setTimeout(() => {
-          setSelectedCountry(null);
-          setSelectedState(null);
-          setSelectedCity(null);
-          setSelectedDate(null);
-          setSelectedPostedSince(null);
-          setSelectedMaxResults(null);
-          setResumeFile(null);
-          setStates([]);
-          setCities([]);
-          setFilteredStates([]);
-          setFilteredCities([]);
-          setSubmitStatus(null);
-          setGoogleSheetUrl(null);
-        }, 1000);
-      }, 3000);
+      // Don't attempt automatic popup - just show the button for user to click
+      // This avoids popup blocker issues completely
     } else {
       setSubmitStatus('error');
       setErrors(prev => ({ 
@@ -1260,25 +1241,39 @@ export default function Home() {
           {/* Success message */}
           {submitStatus === 'success' && (
             <div className="alert alert-success mt-3">
-              <div className="d-flex align-items-center mb-2">
+              <div className="d-flex align-items-center mb-3">
                 <i className="fas fa-check-circle me-2"></i>
-                <span>Your job data has been submitted successfully!</span>
+                <span className="fw-bold">Your job data has been submitted successfully!</span>
               </div>
               {googleSheetUrl && (
-                <div className="mt-2">
-                  <a
-                    href={googleSheetUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-sm btn-outline-success"
-                  >
-                    <i className="fas fa-external-link-alt me-1"></i>
-                    Open Google Sheet
-                  </a>
+                <div className="mt-3 p-3 bg-light rounded border">
+                  <div className="d-flex align-items-center justify-content-between">
+                    <div>
+                      <strong className="text-success">📊 Your Google Sheet is ready!</strong>
+                      <br />
+                      <small className="text-muted">Click the button below to view your job results</small>
+                    </div>
+                    <button
+                      type="button"
+                      className="btn btn-success"
+                      onClick={() => {
+                        // Open the Google Sheet in a new tab
+                        window.open(googleSheetUrl, '_blank');
+                        
+                        // Refresh the page after a short delay
+                        setTimeout(() => {
+                          window.location.reload();
+                        }, 500);
+                      }}
+                    >
+                      <i className="fas fa-external-link-alt me-2"></i>
+                      Open Google Sheet
+                    </button>
+                  </div>
                 </div>
               )}
               <small className="text-muted d-block mt-2">
-                The form will reset and redirect to your Google Sheet shortly.
+                The page will refresh automatically after you click the Google Sheet button.
               </small>
             </div>
           )}
