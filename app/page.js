@@ -186,7 +186,7 @@ export default function Home() {
   const config = {
     cUrl: "https://api.countrystatecity.in/v1/countries",
     ckey: "NHhvOEcyWk50N2Vna3VFTE00bFp3MjFKR0ZEOUhkZlg4RTk1MlJlaA==",
-    webhookUrl: "https://ancillaai.app.n8n.cloud/webhook-test/508343c6-73ad-4dd9-b623-dc2b876c2749"
+    webhookUrl: process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL
   };
 
   // Platform messages for loader
