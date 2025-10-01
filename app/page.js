@@ -1294,6 +1294,29 @@ export default function Home() {
 
         </form>
       </div>
+      
+      {/* Footer */}
+      <footer className="bg-light border-top mt-5 py-4">
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-md-6">
+              <p className="text-muted mb-0">
+                © 2025 Reverse Recruiting. All rights reserved.
+              </p>
+            </div>
+            <div className="col-md-6 text-md-end">
+              <a href="/privacy" className="text-muted text-decoration-none me-3">
+                <i className="fas fa-shield-alt me-1"></i>
+                Privacy Policy
+              </a>
+              <a href="/terms" className="text-muted text-decoration-none">
+                <i className="fas fa-file-contract me-1"></i>
+                Terms of Service
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </>
   );
 }
