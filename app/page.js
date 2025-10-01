@@ -586,26 +586,40 @@ export default function Home() {
 
   // Date picker initialization
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.flatpickr && datePickerRef.current) {
-      flatpickrInstance.current = window.flatpickr(datePickerRef.current, {
-        dateFormat: "Y-m-d",
-        maxDate: "today",
-        allowInput: false,
-        clickOpens: true,
-        onChange: (selectedDates) => {
-          if (selectedDates.length > 0) {
-            setSelectedDate(selectedDates[0]);
-            setSelectedPostedSince(selectedDates[0].toISOString().split('T')[0]);
-            setErrors(prev => ({ ...prev, postedSince: null }));
-          }
-        },
-        onClose: () => {
-          // Optional: handle close event
+    const initializeDatePicker = () => {
+      if (typeof window !== 'undefined' && window.flatpickr && datePickerRef.current) {
+        // Destroy existing instance if any
+        if (flatpickrInstance.current) {
+          flatpickrInstance.current.destroy();
         }
-      });
-    }
+        
+        flatpickrInstance.current = window.flatpickr(datePickerRef.current, {
+          dateFormat: "Y-m-d",
+          maxDate: "today",
+          allowInput: false,
+          clickOpens: true,
+          onChange: (selectedDates) => {
+            if (selectedDates.length > 0) {
+              setSelectedDate(selectedDates[0]);
+              setSelectedPostedSince(selectedDates[0].toISOString().split('T')[0]);
+              setErrors(prev => ({ ...prev, postedSince: null }));
+            }
+          },
+          onClose: () => {
+            // Optional: handle close event
+          }
+        });
+      } else {
+        // If flatpickr is not available yet, try again after a short delay
+        setTimeout(initializeDatePicker, 100);
+      }
+    };
+
+    // Initialize with a small delay to ensure the library is loaded
+    const timer = setTimeout(initializeDatePicker, 200);
 
     return () => {
+      clearTimeout(timer);
       if (flatpickrInstance.current) {
         flatpickrInstance.current.destroy();
       }
@@ -968,7 +982,7 @@ export default function Home() {
           {/* City Dropdown */}
           <div className="job-form-group">
             <label htmlFor="city" className="job-form-label required">
-              City
+              City / Town
             </label>
             <div className={`search-dropdown ${!selectedState ? 'disabled' : ''}`} id="cityDropdown">
               <div className="search-input-container">
